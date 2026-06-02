@@ -32,7 +32,10 @@ def render_image(model, width, height, z=None, z_dim=4, r_strength=1.0, tileable
     with torch.no_grad():
         output = model(coords)
 
-    image_tensor = output.view(height, width, 3)
+    channels = output.shape[-1]
+    image_tensor = output.view(height, width, channels)
+    if channels == 1:
+        image_tensor = image_tensor.repeat(1, 1, 3)
 
     image: Img = Image.fromarray((image_tensor.numpy() * 255).astype('uint8'))
 

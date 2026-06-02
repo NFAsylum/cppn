@@ -4,14 +4,14 @@ from torch.nn import Module, Linear, ModuleList
 from torch.nn.init import normal_
 
 class CPPN(Module):
-    def __init__(self, input_dim=7, hidden_dim=32, hidden_layers=4, weight_sigma=1.0) -> None:
+    def __init__(self, input_dim=7, hidden_dim=32, hidden_layers=4, weight_sigma=1.0, output_channels=3) -> None:
         super().__init__()
 
         self.first: Linear = Linear(input_dim, hidden_dim)
         self.hidden: ModuleList = ModuleList([
             Linear(hidden_dim, hidden_dim) for _ in range(hidden_layers)
         ])
-        self.output: Linear = Linear(hidden_dim, 3)
+        self.output: Linear = Linear(hidden_dim, output_channels)
 
         self._init_weights(weight_sigma)
 

@@ -10,10 +10,13 @@ import datetime
 import random
 
 PRESETS = {'xxxsmall':32, 'xxsmall':64, 'xsmall':128, 'small':256, 'medium':512, 'large':1024, 'huge':2048}
-size = PRESETS['large']
+OUTPUT_CHANNELS = {'rgb':3, 'grayscale':1}
 
 def main():
     output_folder = 'output'
+    size = PRESETS['large']
+    color_mode = 'rgb'
+    
     Path(output_folder).mkdir(exist_ok=True)
 
     tileable = True
@@ -22,14 +25,14 @@ def main():
 
     sigma = random.uniform(0.3, 3)
 
-    model = CPPN(input_dim=spatial_dim + z_dim, weight_sigma=sigma)
+    model = CPPN(input_dim=spatial_dim + z_dim, weight_sigma=sigma, output_channels=OUTPUT_CHANNELS[color_mode])
 
-    generate_images(model, output_folder, 1, tileable)
+    generate_images(model, size, size, output_folder, 1, tileable)
 
-def generate_images(model, output_folder: str, quantity: int, tileable: bool): 
+def generate_images(model, width, height, output_folder: str, quantity: int, tileable: bool): 
     for i in range(quantity):
         r_strength = random.uniform(0.0, 10.0) if not tileable else 1.0
-        image: Img = render_image(model, size, size, r_strength=r_strength, tileable=tileable)
+        image: Img = render_image(model, width, height, r_strength=r_strength, tileable=tileable)
         img_name = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S")) + f"{i:02d}"
         image.save(f'{output_folder}/image-{img_name}.png')
 
