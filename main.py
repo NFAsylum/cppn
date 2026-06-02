@@ -16,7 +16,7 @@ def main():
     output_folder = 'output'
     Path(output_folder).mkdir(exist_ok=True)
 
-    tileable = False
+    tileable = True
     z_dim = 4
     spatial_dim = 4 if tileable else 3
 
