@@ -8,14 +8,18 @@ from render import render_image
 import datetime
 
 def main():
-    model = CPPN()
+    output_folder = 'output'
+    Path(output_folder).mkdir(exist_ok=True)
 
-    image: Img = render_image(model, 480, 480)
+    model = CPPN(weight_sigma=0.5)
+    generate_images(model, output_folder, 1)
 
-    Path('output').mkdir(exist_ok=True)
+def generate_images(model, output_folder: str, quantity: int): 
+    for i in range(quantity):
+        image: Img = render_image(model, 480, 480)
+        img_name = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S")) + f"{i:02d}"
+        image.save(f'{output_folder}/image-{img_name}.png')
 
-    img_name = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
-    image.save(f'output/image-{img_name}.png')
 
 if __name__ == "__main__":
     main()
