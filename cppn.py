@@ -1,18 +1,16 @@
 import torch
-import torch.nn as nn
 from torch import Tensor
-from torch.nn.modules.linear import Linear
-from torch.nn.modules.container import ModuleList
+from torch.nn import Module, Linear, ModuleList
 
-class CPPN(nn.Module):
+class CPPN(Module):
     def __init__(self, input_dim=2, hidden_dim=32, hidden_layers=4) -> None:
         super().__init__()
 
-        self.first: Linear = nn.Linear(input_dim, hidden_dim)
-        self.hidden: ModuleList = nn.ModuleList(modules=[
-            nn.Linear(hidden_dim, hidden_dim) for _ in range(hidden_layers)
+        self.first: Linear = Linear(input_dim, hidden_dim)
+        self.hidden: ModuleList = ModuleList([
+            Linear(hidden_dim, hidden_dim) for _ in range(hidden_layers)
         ])
-        self.output: Linear = nn.Linear(hidden_dim, 3)
+        self.output: Linear = Linear(hidden_dim, 3)
 
     def forward(self, coords) -> Tensor:
         x: Tensor = self.first(coords)
