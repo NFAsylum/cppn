@@ -1,0 +1,5 @@
+Model size: 521.5 KB
+Target size: 1919.7 KB
+Ratio: 3.68x
+PSNR: 15.91 dB
+Training duration: 605.6s

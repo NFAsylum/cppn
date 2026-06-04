@@ -4,7 +4,8 @@ from torch.nn import Module, Linear, ModuleList
 from torch.nn.init import normal_
 
 class CPPN(Module):
-    def __init__(self, input_dim=7, hidden_dim=32, hidden_layers=4, weight_sigma=1.0, output_channels=3) -> None:
+    # hidden_dim=128 with hidden_layers=8 will likely cause model collapse
+    def __init__(self, input_dim=7, hidden_dim=64, hidden_layers=6, weight_sigma=1.0, output_channels=3) -> None:
         super().__init__()
 
         self.first: Linear = Linear(input_dim, hidden_dim)
