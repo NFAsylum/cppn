@@ -16,7 +16,7 @@ from utils import psnr
 
 TARGET_PATH = 'target/cppn-target-image.png'
 TARGET_SIZE = 256
-RENDER_SIZE = 256
+RENDER_SIZE = 512
 ITERATIONS = 3000
 LEARNING_RATE = 1e-3
 SNAPSHOT_ITERS = [0, 50, 200, 500, 1500, 2999]
