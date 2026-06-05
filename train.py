@@ -28,9 +28,18 @@ def main() -> None:
     Path(OUTPUT_FOLDER).mkdir(exist_ok=True)
 
     spatial_dim = 4 if TILEABLE else 3
-    model = CPPN(input_dim=spatial_dim + Z_DIM, output_channels=3)
-    coords = build_coords(size=TARGET_SIZE, tileable=TILEABLE)
-    target = load_target(path=TARGET_PATH, size=TARGET_SIZE)
+
+    device = torch.device('cuda' if torch.cuda.is_available else 'cpu')
+    try:
+        model = CPPN(input_dim=spatial_dim + Z_DIM, output_channels=3).to(device)
+    except RuntimeError as e:
+        print(f'GPU initialization failed ({type(e).__name__}), falling back to CPU')
+        device = torch.device('cpu')
+        model = CPPN(input_dim=spatial_dim + Z_DIM, output_channels=3).to(device)
+    print(f'Using device: {device}')
+
+    coords = build_coords(size=TARGET_SIZE, tileable=TILEABLE).to(device)
+    target = load_target(path=TARGET_PATH, size=TARGET_SIZE).to(device)
 
 
     start = time.perf_counter()
@@ -40,7 +49,7 @@ def main() -> None:
 
     elapsed = time.perf_counter() - start
 
-    final_coords = build_coords(size=RENDER_SIZE, tileable=TILEABLE)
+    final_coords = build_coords(size=RENDER_SIZE, tileable=TILEABLE).to(device)
     final_render(model=model, coords=final_coords, size=RENDER_SIZE, output_folder=OUTPUT_FOLDER)
 
     final_mse = losses[-1]
@@ -93,7 +102,7 @@ def snapshot(model: CPPN, coords: Tensor, size: int, iter: int, output_folder: s
         output = model(coords)
 
     channels = output.shape[-1]
-    image_tensor = output.view(size, size, channels)
+    image_tensor = output.view(size, size, channels).cpu()
     if channels == 1:
         image_tensor = image_tensor.repeat(1, 1, 3)
 
@@ -107,7 +116,7 @@ def final_render(model: CPPN, coords: Tensor, size: int, output_folder: str) -> 
         output = model(coords)
 
     channels = output.shape[-1]
-    image_tensor = output.view(size, size, channels)
+    image_tensor = output.view(size, size, channels).cpu()
     if channels == 1:
         image_tensor = image_tensor.repeat(1, 1, 3)
 
