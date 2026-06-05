@@ -1,5 +1,7 @@
 # CPPN
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NFAsylum/cppn/blob/main/notebooks/cppn_demo.ipynb)
+
 Small PyTorch implementation of Compositional Pattern-Producing Networks (CPPNs). Supports two modes: random generation (procedural art from untrained weights) and single-image overfitting (CPPN as image compression demo).
 
 ![Example image](./examples/image-simple-20260602_03115800.png)
