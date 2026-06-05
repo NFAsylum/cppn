@@ -52,12 +52,12 @@ Training using recommended settings (default values) demonstrates compression (`
 
 This implementation uses Stanley's original 2007 architecture with `Normal(0, 1)` weight initialization. While effective for shallow networks (4-6 layers), this setup fails to train at greater depths.
 
-I observed **model collapse** when configuring `hidden_dim=128` with `hidden_layers=8` in cppn.py:
+I observed **dead network** behavior when configuring `hidden_dim=128` with `hidden_layers=8` in cppn.py:
 - Training loss plateaus around iteration ~200 at a degenerate value
 - Model output collapses to near-zero (near-black image with isolated colored pixels)
 - PSNR drops to 15.91 dB (vs 19.68 dB at recommended `hidden_dim=64`, `hidden_layers=6`)
 
-![Image generated with collapsed model](./examples/training/deeper-failed/snapshot_iter_02999.png)
+![Image generated with dead network](./examples/training/deeper-failed/snapshot_iter_02999.png)
 
 ![Loss curve of collapsed model](./examples/training/deeper-failed/loss_curve.png)
 
